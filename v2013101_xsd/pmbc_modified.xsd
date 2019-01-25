@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Last Modified 03/08/2017
+ This schema includes the NCPDP SCRIPT 2013101 version schemas which need to be obtained from NCPDP www.ncpdp.org
+-->
+<xsd:schema xmlns:datatypes="http://www.ncpdp.org/schema/datatypes"
+ xmlns:ecl="http://www.ncpdp.org/schema/ecl" 
+ xmlns:script="http://www.ncpdp.org/schema/script" 
+ xmlns:specialized="http://www.ncpdp.org/schema/specialized" 
+ xmlns:structures="http://www.ncpdp.org/schema/structures" 
+ xmlns:transport="http://www.ncpdp.org/schema/transport" 
+ xmlns:pmbc="http://www.surescripts.com/messaging" 
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+ targetNamespace="http://www.surescripts.com/messaging" 
+ elementFormDefault="qualified" 
+ attributeFormDefault="unqualified"
+  version="pmbc-0.1.0">
+	<xsd:import namespace="http://www.ncpdp.org/schema/datatypes" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2019011_xsd/datatypes.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/ecl" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2019011_xsd/ecl.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/structures" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2019011_xsd/structures.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/script" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2019011_xsd/script.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/specialized" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2019011_xsd/specialized.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/transport" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2019011_xsd/transport.xsd"/>
+	<!-- ================================================== -->
+	<!-- =====  Element Declarations  -->
+	<!-- ================================================== -->
+	<xsd:element name="Message" type="pmbc:PMBCMessageType"/>
+	<!-- ================================================== -->
+	<!-- =====  Complex Type Definitions  -->
+	<!-- ================================================== -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  PMBCMessageType  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="PMBCMessageType">
+		<xsd:sequence>
+			<xsd:element name="Header" type="transport:HeaderType"/>
+			<xsd:element name="Body" type="pmbc:PMBCBodyType"/>
+		</xsd:sequence>
+		<xsd:attribute name="DatatypesVersion" type="datatypes:an" use="required"/>
+		<xsd:attribute name="TransportVersion" type="datatypes:an" use="required"/>
+		<xsd:attribute name="TransactionDomain" type="ecl:TransactionDomainVersionQualifierCode" use="required"/>
+		<xsd:attribute name="TransactionVersion" type="datatypes:an" use="required"/>
+		<xsd:attribute name="StructuresVersion" type="datatypes:an" use="required"/>
+		<xsd:attribute name="ECLVersion" type="datatypes:an" use="required"/>
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  PMBCBodyType  <<choice>>  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="PMBCBodyType">
+		<xsd:annotation>
+			<xsd:documentation>NCPDP Transactions</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="Status" type="transport:Status">
+				<xsd:annotation>
+					<xsd:documentation>This response is used to relay acceptance of a transaction back to the sender. A Status in response indicates acceptance and responsibility. A Status in response to a GetMessage indicates that no mail is waiting for pickup. A Status cannot be mailboxed and may not contain an error.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Error" type="transport:Error">
+				<xsd:annotation>
+					<xsd:documentation>This transaction response indicates an error has occurred indicating the request was terminated. An Error can be generated when there is a communication problem or when the transaction actually had an error.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Verify" type="transport:Verify">
+				<xsd:annotation>
+					<xsd:documentation>This transaction is generated when the request transaction asks for return receipt.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PMBCRequest" type="pmbc:PMBCRequest">
+				<xsd:annotation>
+					<xsd:documentation>Patient Medication Benefit Check Request. This transaction is sent from the prescriber to the PBM/Payer to  determine whether a specified drug is on formulary, what coverage factors apply, and the estimated patient costs.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PMBCResponse" type="pmbc:PMBCResponse">
+				<xsd:annotation>
+					<xsd:documentation>Patient Medication Benefit Check Response. This transaction is is sent from the PBM/Payer to the prescriber system in response to the request for benefit information.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<!--  PMBCRequest  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="PMBCRequest">
+		<xsd:annotation>
+			<xsd:documentation>Patient Medication Benefit Check request. This transaction is sent from the prescriber to the PBM/Payer to  determine whether a specified drug is on formulary, what coverage factors apply, and the estimated patient costs.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="BenefitsCoordination" type="pmbc:BenefitsCoordinationBenefitCheck"/>
+			<xsd:element name="MedicationRequested" type="pmbc:PrescribedMedicationBenefitCheckDrugOnly"/>
+			<xsd:element name="Patient" type="structures:Patient"/>
+			<xsd:element name="Pharmacy" type="structures:MandatoryPharmacy">
+				<xsd:annotation>
+					<xsd:documentation>See SCRIPT Request of Definition and Usage </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Prescriber" type="pmbc:OptionalPrescriberName">
+				<xsd:annotation>
+					<xsd:documentation>See SCRIPT Request of Definition and Usage </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<!--  PMBCResponse  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="PMBCResponse">
+		<xsd:annotation>
+			<xsd:documentation>Patient Benefit Medication Check Response. This transaction is is sent from the PBM/Payer to the prescriber system in response to the request for benefit information.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Response" type="pmbc:BenefitResponseType">
+				<xsd:annotation>
+					<xsd:documentation>See SCRIPTRequest of Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BenefitsCoordination" type="pmbc:BenefitsCoordinationBenefitCheck" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See SCRIPTRequest of Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Patient" type="structures:Patient" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See SCRIPTRequest of Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Pharmacy" type="structures:MandatoryPharmacy" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See SCRIPTRequest of Definition and Usage </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Prescriber" type="pmbc:OptionalPrescriberName" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See SCRIPTRequest of Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MedicationRequested" type="pmbc:PrescribedMedicationBenefitCheckDrugOnly">
+				<xsd:annotation>
+					<xsd:documentation>Primary Medication that is Priced</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PricingCoverages" minOccurs="0" maxOccurs="4">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Pharmacy" type="pmbc:OptionalPharmacy2" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Pricing for each pharmacy available</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="PricingCoverage" type="pmbc:PricingCoverageFactors">
+							<xsd:annotation>
+								<xsd:documentation>Contains pricing information and coverage status for the drug requested.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Alternatives" minOccurs="0" maxOccurs="5">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="AlternativeMedications" type="pmbc:PrescribedMedicationBenefitCheckDrugOnly"/>
+						<xsd:element name="PricingCoverages" maxOccurs="4">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Pharmacy" type="pmbc:OptionalPharmacy2" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Pricing for each pharmacy available</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="PricingCoverage" type="pmbc:PricingCoverageFactors">
+										<xsd:annotation>
+											<xsd:documentation>Designates the formulary and pricing information for the drug requested. At least one Formulary element is required if response code is P for Processed or PNA for Processed, All known benefit types should be returned.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  BenefitsCoordinationBenefitCheck  -->
+	<!--Made payer id and PBMMemberID mandatory-->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="BenefitsCoordinationBenefitCheck">
+		<xsd:sequence>
+			<xsd:element name="PayerIdentification" type="datatypes:PayerID" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PayerName" type="datatypes:an1..70" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CardholderID" type="datatypes:an1..35" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CardHolderName" type="datatypes:NameType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GroupID" type="datatypes:an1..35" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PayerResponsibilityCode" type="ecl:PayerResponsibilityCode" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PatientRelationship" type="ecl:PatientRelationshipCode" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PersonCode" type="datatypes:n1..3" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GroupName" type="datatypes:an1..70" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Address" type="datatypes:AddressType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CommunicationNumbers" type="datatypes:CommunicationNumbersType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Consent" type="ecl:ConsentCode" minOccurs="0" maxOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PBMMemberID" type="datatypes:an1..80">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ResponsibleParty" type="datatypes:NameType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ServiceTypeCoded" type="ecl:ServiceTypeCode" minOccurs="0" maxOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See BaseBenefitsCoordination for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<!--<xsd:complexContent>
+			<xsd:restriction base="structures:BaseBenefitsCoordination"/>-->
+		<!--	</xsd:complexContent>-->
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  BenefitResponseType  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="BenefitResponseType">
+		<xsd:sequence>
+			<xsd:element name="ReasonCode" type="pmbc:ReasonCode20"/>
+			<xsd:element name="FreeText" type="datatypes:an1..255" minOccurs="0"/>
+			<xsd:element name="ProcessedStatus" type="xsd:boolean">
+				<xsd:annotation>
+					<xsd:documentation>true = Success</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  CoverageMessage  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="CoverageMessage">
+		<xsd:sequence>
+			<xsd:element name="LongMessage" type="datatypes:an1..210" minOccurs="0"/>
+			<xsd:element name="ShortMessage" type="datatypes:an1..100"/>
+			<xsd:element name="MessageType" type="pmbc:CoverageMessageTypes"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  CoverageMessageTypes  <<ncpdpecl>>  -->
+	<!--  Added for BenefitRquest/RFS based on Prescription Benefit IG 2015-04-10-->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:simpleType name="CoverageMessageTypes">
+		<xsd:annotation>
+			<xsd:documentation>Coverage Message Types used for Resource Links and Text Messages</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="ecl:Code">
+			<xsd:enumeration value="AL">
+				<xsd:annotation>
+					<xsd:documentation>Age Limits</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="CP">
+				<xsd:annotation>
+					<xsd:documentation>Copay</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="DE">
+				<xsd:annotation>
+					<xsd:documentation>Product Coverage Exclusion</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="FM">
+				<xsd:annotation>
+					<xsd:documentation>Formulary</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="GI">
+				<xsd:annotation>
+					<xsd:documentation>General Information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="GL">
+				<xsd:annotation>
+					<xsd:documentation>Gender Limits</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PA">
+				<xsd:annotation>
+					<xsd:documentation>Prior Authorization</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="QL">
+				<xsd:annotation>
+					<xsd:documentation>Quantity Limits</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="ST">
+				<xsd:annotation>
+					<xsd:documentation>Step Therapy</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  CoverageReferenceCode  <<ncpdpecl>>  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:simpleType name="CoverageReferenceCode">
+		<xsd:annotation>
+			<xsd:documentation>Coverage Reference Code</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="ecl:Code">
+			<xsd:enumeration value="AgeLimits"/>
+			<xsd:enumeration value="DaysSupplyExceeded"/>
+			<xsd:enumeration value="DrugExclusion"/>
+			<xsd:enumeration value="ExcessiveUtilization"/>
+			<xsd:enumeration value="FullCostNotCovered"/>
+			<xsd:enumeration value="GenderLimits"/>
+			<xsd:enumeration value="MandatoryGeneric"/>
+			<xsd:enumeration value="MedicalNecessity">
+				<xsd:annotation>
+					<xsd:documentation>Medical Necessity (For Formulary 1.0 only).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="NotOnFormulary"/>
+			<xsd:enumeration value="PharmacyOutOfNetwork"/>
+			<xsd:enumeration value="PlanLimitExclusion"/>
+			<xsd:enumeration value="QuantityLimits"/>
+			<xsd:enumeration value="QuantityLimitExceeded"/>
+			<xsd:enumeration value="QuantityNotValid"/>
+			<xsd:enumeration value="ResourceLink">
+				<xsd:annotation>
+					<xsd:documentation>Resource Link – Drug-Specific Level.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="StepTherapy"/>
+			<xsd:enumeration value="TextMessage"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  DrugCoded1  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="DrugCoded1">
+		<xsd:annotation>
+			<xsd:documentation>Coded Drug Structure used in Medication</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ProductCode" type="datatypes:ProductCode">
+				<xsd:annotation>
+					<xsd:documentation>RxRenewalRequest and RxChangeRequest – whenever possible, send the drug number. If CompoundCoded = 2 (Compound), this field must not be sent.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Strength" type="datatypes:Strength" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Need to add annotation to strength code 
+Use http://evs.nci.nih.gov/ftp1/NCPDP/DrugStrength.csv
+
+</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DrugDBCode" type="datatypes:DrugDBCode" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>If CompoundCoded = 2 (Compound), this field must not be sent.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DEASchedule" type="datatypes:NCICode" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Required if the medication is categorized as a controlled substance by the Drug Enforcement Administration (DEA). The DEA Schedule would be populated by the system generating the message, and would utilize the Federal DEA Schedule classification code list, based on federal classification of the medication or the state reclassification of the medication. 
+
+If CompoundCoded = 2 (Compound), this field must not be sent.
+            
+NCPDP DEASchedule Terminology – available at
+http://www.cancer.gov/cancertopics/terminologyresources/page7 </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  DrugStatusCode  <<ncpdpecl>>  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:simpleType name="DrugStatusCode">
+		<xsd:annotation>
+			<xsd:documentation>Code identifying the formulary coverage status of the prescribed drug.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="ecl:Code">
+			<xsd:enumeration value="Covered">
+				<xsd:annotation>
+					<xsd:documentation>Covered.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="CoveredWithRestrictions">
+				<xsd:annotation>
+					<xsd:documentation>Covered with restrictions.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="ErrorProcessingPharmacyType"/>
+			<xsd:enumeration value="NotCovered">
+				<xsd:annotation>
+					<xsd:documentation>Not Covered (Not Reimbursable).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PharmacyTypeNotSupported"/>
+			<xsd:enumeration value="PharmacyNotFound"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  FormularyStatusType  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:simpleType name="FormularyStatusType">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="U|0|[1-9][0-9]?"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  OptionalPharmacy2  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="OptionalPharmacy2">
+		<xsd:annotation>
+			<xsd:documentation>Value P2</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="PharmacyType" type="pmbc:PharmacyType1"/>
+			<xsd:element name="Identification" type="datatypes:PharmacyID" minOccurs="0"/>
+			<xsd:element name="Specialty" type="datatypes:an1..10" minOccurs="0"/>
+			<xsd:element name="Pharmacist" type="datatypes:NameType" minOccurs="0"/>
+			<xsd:element name="BusinessName" type="datatypes:an1..35" minOccurs="0"/>
+			<xsd:element name="Address" type="datatypes:AddressType" minOccurs="0"/>
+			<xsd:element name="CommunicationNumbers" type="datatypes:CommunicationNumbersType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  OptionalPrescriberName  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="OptionalPrescriberName">
+		<xsd:annotation>
+			<xsd:documentation>Value PC</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Identification" type="datatypes:ProviderID">
+				<xsd:annotation>
+					<xsd:documentation>See HistoryPrescriber for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Specialty" type="datatypes:an1..10" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See HistoryPrescriber for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ClinicName" type="datatypes:an1..70" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See HistoryPrescriber for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Name" type="datatypes:NameType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See HistoryPrescriber for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Address" type="datatypes:AddressType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See HistoryPrescriber for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PrescriberAgent" type="datatypes:NameType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See HistoryPrescriber for Definition and Usage.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CommunicationNumbers" type="datatypes:CommunicationNumbersType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See HistoryPrescriber for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  PharmacyID  -->
+	<!-- Made NPI optional to match original PMBC schema -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="PharmacyID">
+		<xsd:sequence>
+			<xsd:element name="NCPDPID" type="datatypes:an1..35"/>
+			<xsd:element name="StateLicenseNumber" type="datatypes:an1..35" minOccurs="0"/>
+			<xsd:element name="MedicareNumber" type="datatypes:an1..35" minOccurs="0"/>
+			<xsd:element name="MedicaidNumber" type="datatypes:an1..35" minOccurs="0"/>
+			<xsd:element name="UPIN" type="datatypes:an1..35" minOccurs="0"/>
+			<xsd:element name="FacilityID" type="datatypes:an1..35" minOccurs="0" maxOccurs="0"/>
+			<xsd:element name="PayerID" type="datatypes:an1..80" minOccurs="0" maxOccurs="0"/>
+			<xsd:element name="ProcessorIdentificationNumber" type="datatypes:an1..35" minOccurs="0" maxOccurs="0"/>
+			<xsd:element name="BINLocationNumber" type="datatypes:an1..35" minOccurs="0" maxOccurs="0"/>
+			<xsd:element name="MedicalRecordIdentificationNumberEHR" type="datatypes:an1..35" minOccurs="0" maxOccurs="0"/>
+			<xsd:element name="PatientAccountNumber" type="datatypes:an1..35" minOccurs="0" maxOccurs="0"/>
+			<xsd:element name="DEANumber" type="datatypes:an1..35" minOccurs="0"/>
+			<xsd:element name="HIN" type="datatypes:an1..35" minOccurs="0"/>
+			<xsd:element name="NAICCode" type="datatypes:an1..35" minOccurs="0" maxOccurs="0"/>
+			<xsd:element name="SocialSecurity" type="datatypes:an1..35" minOccurs="0" maxOccurs="0"/>
+			<xsd:element name="NPI" type="datatypes:an1..35" minOccurs="0"/>
+			<xsd:element name="CertificateToPrescribe" type="datatypes:an1..35" minOccurs="0" maxOccurs="0"/>
+			<xsd:element name="Data2000WaiverID" type="datatypes:an1..35" minOccurs="0" maxOccurs="0"/>
+			<xsd:element name="MutuallyDefined" type="datatypes:an1..35" minOccurs="0"/>
+		</xsd:sequence>
+		<!--	<xsd:annotation>
+			<xsd:documentation>PharmacyID is explicit ID structure to improve comprehension and validation of ID by using explicit tags for each ID type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:restriction base="datatypes:SuperSetID">-->
+		<!--	</xsd:restriction>
+		</xsd:complexContent>-->
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  PharmacyType1  <<ncpdpecl>>  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:simpleType name="PharmacyType1">
+		<xsd:annotation>
+			<xsd:documentation>Type of Pharmacy.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Retail">
+				<xsd:annotation>
+					<xsd:documentation>Retail - A dully-licensed entity that delivers pharmaceutical goods or services for sale to or use by the final consumer.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="Mail">
+				<xsd:annotation>
+					<xsd:documentation>Mail Order -A distribution center that provides medications directly to patients via US Mail or other delivery services.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="90DayAtRetail">
+				<xsd:annotation>
+					<xsd:documentation>Retail 90 days</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="Specialty">
+				<xsd:annotation>
+					<xsd:documentation>Specialty</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--	PrescribedMedicationBenefitCheckDrugOnlyDrugOnly-->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="PrescribedMedicationBenefitCheckDrugOnly">
+		<xsd:sequence>
+			<xsd:element name="DrugDescription" type="datatypes:an1..105" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage (MADE OPTIONAL FOR PILOT)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DrugCoded" type="pmbc:DrugCoded1">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Quantity" type="datatypes:Quantity">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DaysSupply" type="datatypes:n1..3">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WrittenDate" type="datatypes:DateType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage (MADE OPTIONAL FOR PILOT)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LastFillDate" type="datatypes:DateType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ExpirationDate" type="datatypes:DateType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EffectiveDate" type="datatypes:DateType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PeriodEnd" type="datatypes:DateType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DeliveredOnDate" type="datatypes:DateType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DateValidated" type="datatypes:DateType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Substitutions" type="ecl:SubstitutionCodeRestricted" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage (MADE OPTIONAL FOR PILOT)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NumberOfRefills" type="datatypes:n1..2" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Diagnosis" type="structures:Diagnosis" minOccurs="0" maxOccurs="2">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CouponNumber" type="datatypes:an1..35" minOccurs="0"/>
+			<xsd:element name="PriorAuthorization" type="datatypes:an1..35" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Note" type="datatypes:an1..210" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DrugUseEvaluation" type="datatypes:DrugUseEvaluation" minOccurs="0" maxOccurs="5">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DrugCoverageStatusCode" type="ecl:DrugCoverageStatusCode" minOccurs="0" maxOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PriorAuthorizationStatus" type="ecl:PriorAuthorizationStatusCode" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OtherCompoundInformation" type="structures:OtherCompoundInformationType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Sig" type="structures:Sig" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage. (MADE OPTIONAL FOR PILOT)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Compound" type="datatypes:CompoundIngredientLotNotUsed" minOccurs="0" maxOccurs="25">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SoldDate" type="datatypes:DateType" minOccurs="0" maxOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PharmacyRequestedRefills" type="datatypes:n1..2" minOccurs="0" maxOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DoNotFill" type="ecl:DoNotFillCode" minOccurs="0" maxOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NeededNoLaterThanDate" type="datatypes:UtcDateType" minOccurs="0" maxOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TimeZone" type="datatypes:TimeZone" minOccurs="0" maxOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NeededNoLaterThanReason" type="datatypes:an1..70" minOccurs="0" maxOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RefillsRemaining" type="datatypes:n1..2" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>See Medication for Definition and Usage</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RefillsLimit" type="ecl:BooleanCode" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Added for PILOT</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  PricingCoverageFactors (MODIFIED FORMULARYTYPE FOR PILOT)  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="PricingCoverageFactors">
+		<xsd:sequence>
+			<xsd:element name="DrugStatus">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DrugStatusCode" type="pmbc:DrugStatusCode"/>
+						<xsd:element name="FreeText" type="datatypes:an1..255" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="QuantityPriced" type="datatypes:Quantity" minOccurs="0"/>
+			<xsd:element name="DaysSupplyPriced" type="datatypes:n1..4" minOccurs="0"/>
+			<xsd:element name="PlanPayAmount" type="datatypes:n1..10" minOccurs="0"/>
+			<xsd:element name="EstimatedPatientPayAmount" type="datatypes:n1..10" minOccurs="0"/>
+			<xsd:element name="OOPAppliedAmount" type="datatypes:n1..10" minOccurs="0"/>
+			<xsd:element name="OOPRemainingAmount" type="datatypes:n1..10" minOccurs="0"/>
+			<xsd:element name="DeductibleAppliedAmount" type="datatypes:n1..10" minOccurs="0"/>
+			<xsd:element name="DeductibleRemainingAmount" type="datatypes:n1..10" minOccurs="0"/>
+			<xsd:element name="CoverageAlerts" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ReferenceCode" type="pmbc:CoverageReferenceCode" minOccurs="0"/>
+						<xsd:element name="ReferenceText" type="datatypes:an1..210" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FormularyStatus" type="pmbc:FormularyStatusType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>U = Unknown
+0 =  Not Reimbursable 1 = Non Formulary
+2 = On Formulary (Not Preferred)
+3 = Preferred Level 1
+4 = Preferred Level 2
+5 = Preferred Level 3
+Preferred Levels up to 99 are allowed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PriorAuthRequired" type="ecl:BooleanCode" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Y- PA required
+N - PA Not required</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  QuantityLimit  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:complexType name="QuantityLimit">
+		<xsd:sequence>
+			<xsd:element name="QuantityLimitApplicable" type="ecl:BooleanCode">
+				<xsd:annotation>
+					<xsd:documentation>Always present (with value Y) even if other elements are absent.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MaximumAmount" type="xsd:double" minOccurs="0"/>
+			<xsd:element name="MaximumAmountQualifier" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="MaximumAmountTimePeriod" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="MaximumAmountTimePeriodStartDate" type="xsd:dateTime" minOccurs="0"/>
+			<xsd:element name="MaximumAmountTimePeriodEndDate" type="xsd:dateTime" minOccurs="0"/>
+			<xsd:element name="MaximumAmountTimePeriodUnits" type="xsd:int" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!--  ReasonCode20 from 2014 plus Telecom reject codes>  -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<xsd:simpleType name="ReasonCode20">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="DiscontinuedNDC"/>
+			<xsd:enumeration value="DrugNotFound"/>
+			<xsd:enumeration value="MissingInvalidDOB"/>
+			<xsd:enumeration value="MissingInvalidDaysSupply"/>
+			<xsd:enumeration value="MissingInvalidGenderCode"/>
+			<xsd:enumeration value="MissingInvalidPrescriberID"/>
+			<xsd:enumeration value="MissingInvalidQuantity"/>
+			<xsd:enumeration value="NotProcessed">
+				<xsd:annotation>
+					<xsd:documentation>Not Processed. Drug requested was not processed</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PBMMemberIDMissingInvalid"/>
+			<xsd:enumeration value="PatientNotCovered"/>
+			<xsd:enumeration value="PatientNotFound"/>
+			<xsd:enumeration value="PharmacyIDMissingInvalid"/>
+			<xsd:enumeration value="Processed"/>
+			<xsd:enumeration value="ProcessedAlternativesAvailable">
+				<xsd:annotation>
+					<xsd:documentation>Multiple alternatives are available at potentially lower cost</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="SystemError"/>
+			<xsd:enumeration value="UnmatchedQuantityUnit"/>
+			<xsd:enumeration value="ValidationError"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

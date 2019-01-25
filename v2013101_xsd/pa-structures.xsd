@@ -1,0 +1,1058 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+Copyright (c) 2007, 2008, 2009, 2010, 2011, 2012, 2013 NCPDP. All rights reserved. This work is owned by National Council for Prescription Drug Programs, Inc., 924Ø E. Raintree Drive, Scottsdale, AZ 8526Ø, (48Ø) 477-1ØØØ, ncpdp@ncpdp.org, and protected by the copyright laws of the United States. 17 U.S.C. §1Ø1, et. seq. Permission is given to Council members to copy and use the work or any part thereof in connection with the business purposes of the Council members.   
+
+The work may not be changed or altered. The work may not be sold, used or exploited for commercial purposes. This permission may be revoked by National Council for Prescription Drug Programs, Inc., at any time. The National Council for Prescription Drugs Programs, Inc. is not responsible for any errors or damage as a result of the use of the work.
+NCPDP recognizes the confidentiality of certain information exchanged electronically through the use of its standards. Users should be familiar with the federal, state, and local laws, regulations and codes requiring confidentiality of this information and should utilize the standards accordingly.
+
+NOTICE: In addition, this NCPDP Standard contains certain data fields and elements that may be completed by users with the proprietary information of third parties. The use and distribution of third parties' proprietary information without such third parties' consent, or the execution of a license or other agreement with such third party, could subject the user to numerous legal claims. All users are encouraged to contact such third parties to determine whether such information is proprietary and if necessary, to consult with legal counsel to make arrangements for the use and distribution of such proprietary information.
+--><xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.ncpdp.org/schema/pa-structures" version="v2013101" xmlns:datatypes="http://www.ncpdp.org/schema/datatypes" xmlns:ecl="http://www.ncpdp.org/schema/ecl" xmlns:pa-structures="http://www.ncpdp.org/schema/pa-structures" xmlns:structures="http://www.ncpdp.org/schema/structures" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import namespace="http://www.ncpdp.org/schema/datatypes" schemaLocation="datatypes.xsd"/>
+  <xsd:import namespace="http://www.ncpdp.org/schema/ecl" schemaLocation="ecl.xsd"/>
+  <xsd:import namespace="http://www.ncpdp.org/schema/structures" schemaLocation="structures.xsd"/>
+  <!-- ================================================== -->
+  <!-- =====  Complex Type Definitions  -->
+  <!-- ================================================== -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAAnswerChoiceCommonType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAAnswerChoiceCommonType">
+    <xsd:sequence>
+      <xsd:element name="ChoiceID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the answer choice for a question. Must be unique per answer choice for the question.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="SequenceNumber" type="datatypes:n1..3">
+        <xsd:annotation>
+          <xsd:documentation>Sequence number assigned by the payer to indicate the order the answer choices for a question should be displayed to the provider. Must be unique per answer choice for the question.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ChoiceText" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Answer choice text. Vendor to display to the prescriber as the answer choice text for Select question type.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="AdditionalFreeTextIndicator" type="ecl:AdditionalFreeTextIndicatorTypeCode">
+        <xsd:annotation>
+          <xsd:documentation>Indicates if the prescriber is allowed or is required to supply additional free text with their answer to the question.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="CodedReference" type="pa-structures:PACodedReference"/>
+      <xsd:element minOccurs="0" name="NextQuestionID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>A QuestionID or value of "END" to identify the next question when it is dependent on the answer to the question (i.e., answer choice or numeric condition). Required when the DefaultNextQuestionID for the question is not provided.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAAnswerChoiceForNumericType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAAnswerChoiceForNumericType">
+    <xsd:sequence>
+      <xsd:element name="NextQuestionCondition" type="pa-structures:PANumericType"/>
+      <xsd:element name="Answer" type="datatypes:an1..2000"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAAnswerChoiceForPARequest  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAAnswerChoiceForPARequest">
+    <xsd:sequence>
+      <xsd:element name="ChoiceID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the answer choice for a question. Must be unique per answer choice for the question.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="AdditionalFreeText" type="datatypes:an1..2000"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAAnswerForTextType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAAnswerForTextType">
+    <xsd:complexContent>
+      <xsd:extension base="pa-structures:PAFreeTextTypeBasic">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Answer" type="pa-structures:PACompletedAnswerChoiceForFreeTextType"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAAppeal  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAAppeal">
+    <xsd:sequence>
+      <xsd:element name="IsEAppealSupported" type="ecl:BooleanCode">
+        <xsd:annotation>
+          <xsd:documentation>Indicates if payer supports electronic appeals submission.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="ExpirationDate" type="datatypes:DateType"/>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAAppealRequestType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAAppealRequestType">
+    <xsd:sequence>
+      <xsd:element name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="AppealCaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific appeal request. If a AppealCaseID is assigned, it is to be exchanged on all subsequent appeal transactions.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="DeadlineForReply" type="datatypes:DateType">
+        <xsd:annotation>
+          <xsd:documentation>The timeframe for the provider to provide requested information. This element is related to the case and contains the expiration date that the prescriber is to take the next step. It is not the expiration date of the questions.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="QuestionSet" type="pa-structures:PAQuestionSetGroupForRequest"/>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAApprovedDetail  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAApprovedDetail">
+    <xsd:sequence>
+      <xsd:element name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="AuthorizationNumber" type="datatypes:an1..140"/>
+      <xsd:element maxOccurs="5" minOccurs="0" name="AuthorizationDetail" type="pa-structures:PAAuthorizationDetails"/>
+      <xsd:element minOccurs="0" name="AuthorizationPeriod" type="structures:DateGroupWithEffectiveExpiredDate"/>
+      <xsd:element name="Appeal" type="pa-structures:PAAppeal"/>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAApprovedDetailForAppeal  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAApprovedDetailForAppeal">
+    <xsd:complexContent>
+      <xsd:extension base="pa-structures:PAApprovedDetail">
+        <xsd:sequence>
+          <xsd:element name="AppealCaseID" type="datatypes:an1..35">
+            <xsd:annotation>
+              <xsd:documentation>ID assigned by the payer to identify the specific appeal request. If a AppealCaseID is assigned, it is to be exchanged on all subsequent appeal transactions.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAApprovedForCancel  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAApprovedForCancel">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAAuthorizationDetails  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAAuthorizationDetails">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PharmacyType" type="ecl:PharmacyType"/>
+      <xsd:element minOccurs="0" name="Quantity" type="datatypes:Quantity"/>
+      <xsd:element minOccurs="0" name="DaysSupply" type="datatypes:n1..3"/>
+      <xsd:element minOccurs="0" name="NumberOfCycles" type="datatypes:n1..3">
+        <xsd:annotation>
+          <xsd:documentation>Number of cycles authorized.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="NumberOfRefills" type="datatypes:n1..2"/>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACancelRequestStructure  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACancelRequestStructure">
+    <xsd:sequence>
+      <xsd:element name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="CancelReasonCode" type="ecl:PACancelReasonCode">
+        <xsd:annotation>
+          <xsd:documentation>Code indicating the reason for the prior authorization cancellation.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="IsPatientNotified" type="ecl:BooleanCode">
+        <xsd:annotation>
+          <xsd:documentation>Indicates if the prescriber has notified the patient that the prescriber has requested the PA Request be cancelled.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACancelResponseChoiceType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACancelResponseChoiceType">
+    <xsd:choice>
+      <xsd:element name="Approved" type="pa-structures:PAApprovedForCancel"/>
+      <xsd:element name="Denied" type="pa-structures:PADeniedForCancelType"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACancelResponseStructure  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACancelResponseStructure">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="ReferenceNumber" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>Transaction Key. Used in conjunction with same field described above in the RequestReferenceNumber. The Mailbox may return the positional key of the specific piece of mail within their files.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ResponseStatus" type="pa-structures:PACancelResponseChoiceType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACodedReference  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACodedReference">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="CodeSystemVersion" type="datatypes:an">
+        <xsd:annotation>
+          <xsd:documentation>The version of the code system used.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Qualifier" type="ecl:PACodedReferenceCode">
+        <xsd:annotation>
+          <xsd:documentation>Qualifier to identify the code system being used.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Code" type="ecl:Code">
+        <xsd:annotation>
+          <xsd:documentation>The code from the source.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Description" type="datatypes:an">
+        <xsd:annotation>
+          <xsd:documentation>The textual representation of the CodedReferenceCode.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACodedReferenceAnswerChoiceDateType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACodedReferenceAnswerChoiceDateType">
+    <xsd:choice>
+      <xsd:element name="Date" type="datatypes:DateType">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the answer to the question is a date.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="SeeTransactionLevelAttachmentControlNumber" type="datatypes:an">
+        <xsd:annotation>
+          <xsd:documentation>Indicates to see attachment at the transaction level instead of an attachment at a completed answer level.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="AnswerValue" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Coded reference value for the answer.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Attachment" type="structures:AttachmentWithControlNumber"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACodedReferenceAnswerChoiceFreeTextType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACodedReferenceAnswerChoiceFreeTextType">
+    <xsd:choice>
+      <xsd:element name="SeeTransactionLevelAttachmentControlNumber" type="datatypes:an">
+        <xsd:annotation>
+          <xsd:documentation>Indicates to see attachment at the transaction level instead of an attachment at a completed answer level.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="AnswerValue" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Coded reference value for the answer.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Attachment" type="structures:AttachmentWithControlNumber"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACodedReferenceAnswerChoiceNumericType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACodedReferenceAnswerChoiceNumericType">
+    <xsd:choice>
+      <xsd:element name="NumericAnswer" type="datatypes:n1..18"/>
+      <xsd:element name="SeeTransactionLevelAttachmentControlNumber" type="datatypes:an">
+        <xsd:annotation>
+          <xsd:documentation>Indicates to see attachment at the transaction level instead of an attachment at a completed answer level.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="AnswerValue" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Coded reference value for the answer.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Attachment" type="structures:AttachmentWithControlNumber"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACodedReferenceAnswerChoiceSelectType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACodedReferenceAnswerChoiceSelectType">
+    <xsd:choice>
+      <xsd:element name="Choice" type="pa-structures:PAAnswerChoiceForPARequest"/>
+      <xsd:element name="SeeTransactionLevelAttachmentControlNumber" type="datatypes:an">
+        <xsd:annotation>
+          <xsd:documentation>Indicates to see attachment at the transaction level instead of an attachment at a completed answer level.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="AnswerValue" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Coded reference value for the answer.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Attachment" type="structures:AttachmentWithControlNumber"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACompletedAnswerChoiceForDateType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACompletedAnswerChoiceForDateType">
+    <xsd:choice>
+      <xsd:element name="PrescriberProvidedAnswer" type="datatypes:DateType">
+        <xsd:annotation>
+          <xsd:documentation>Free text answer provided by prescriber.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="CodedReferenceAnswer" type="pa-structures:PACodedReferenceAnswerChoiceDateType"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACompletedAnswerChoiceForFreeTextType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACompletedAnswerChoiceForFreeTextType">
+    <xsd:choice>
+      <xsd:element name="PrescriberProvidedAnswer" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text answer provided by prescriber.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="CodedReferenceAnswer" type="pa-structures:PACodedReferenceAnswerChoiceFreeTextType"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACompletedAnswerChoiceForNumericType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACompletedAnswerChoiceForNumericType">
+    <xsd:choice>
+      <xsd:element name="PrescriberProvidedNumericAnswer" type="datatypes:n1..18">
+        <xsd:annotation>
+          <xsd:documentation>Numeric answer provided by prescriber.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="CodedReferenceAnswer" type="pa-structures:PACodedReferenceAnswerChoiceNumericType"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PACompletedAnswerChoiceForSelectType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PACompletedAnswerChoiceForSelectType">
+    <xsd:choice>
+      <xsd:element name="PrescriberProvidedAnswer" type="pa-structures:PAAnswerChoiceForPARequest">
+        <xsd:annotation>
+          <xsd:documentation>Free text answer provided by prescriber.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="CodedReferenceAnswer" type="pa-structures:PACodedReferenceAnswerChoiceSelectType"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PADateTypeForRequest  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PADateTypeForRequest">
+    <xsd:sequence>
+      <xsd:element name="Date" type="datatypes:DateTypeFlag">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the answer to the question is a date.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="Answer" type="pa-structures:PACompletedAnswerChoiceForDateType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PADeniedForCancelType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PADeniedForCancelType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="ReasonCode" type="ecl:PADeniedForCancelReasonCode"/>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PADeniedType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PADeniedType">
+    <xsd:sequence>
+      <xsd:element name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Appeal" type="pa-structures:PAAppeal"/>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PADeniedTypeForAppeal  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PADeniedTypeForAppeal">
+    <xsd:complexContent>
+      <xsd:extension base="pa-structures:PADeniedType">
+        <xsd:sequence>
+          <xsd:element name="AppealCaseID" type="datatypes:an1..35">
+            <xsd:annotation>
+              <xsd:documentation>ID assigned by the payer to identify the specific appeal request. If a AppealCaseID is assigned, it is to be exchanged on all subsequent appeal transactions.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAFreeTextTypeBasic  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAFreeTextTypeBasic">
+    <xsd:sequence>
+      <xsd:element default="Y" name="IsFreeText" type="ecl:BooleanCode">
+        <xsd:annotation>
+          <xsd:documentation>A value of "Y" to indicate the answer to the question is free text. A value of "N" should not be used. Use other question type if not free text.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAModelType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAModelType">
+    <xsd:choice>
+      <xsd:element name="SolicitedModel" type="pa-structures:PASolicitedType"/>
+      <xsd:element name="UnSolicitedModel" type="pa-structures:PAUnsolicitedType"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PANextQuestionConditionType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PANextQuestionConditionType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="NextQuestionCondition" type="pa-structures:PANumericType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PANumericChoiceForPARequest  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PANumericChoiceForPARequest">
+    <xsd:complexContent>
+      <xsd:extension base="pa-structures:PANumericTypeBasic">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="Answer" type="pa-structures:PACompletedAnswerChoiceForNumericType"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PANumericType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PANumericType">
+    <xsd:choice>
+      <xsd:element name="SingleComparison" type="pa-structures:PANumericValueSimpleType"/>
+      <xsd:element name="RangeComparison" type="pa-structures:PANumericValueType"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PANumericTypeBasic  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PANumericTypeBasic">
+    <xsd:sequence>
+      <xsd:element default="Y" name="IsNumeric" type="ecl:BooleanCode">
+        <xsd:annotation>
+          <xsd:documentation>A value of "Y" to indicate the answer to the question is Numeric. A value of "N" should not be used. Use other question type if not Numeric.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="NextQuestionCondition" type="pa-structures:PANumericType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PANumericValueSimpleType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PANumericValueSimpleType">
+    <xsd:sequence>
+      <xsd:element name="ComparisonOperator" type="ecl:ComparisonOperatorCode">
+        <xsd:annotation>
+          <xsd:documentation>Code that conveys the relationship between the answered value to a question and a defined boundary.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ComparisonValue" type="datatypes:n1..18">
+        <xsd:annotation>
+          <xsd:documentation>Value for the boundary of the comparison.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="NextQuestionID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>A QuestionID or value of "END" to identify the next question when it is dependent on the answer to the question (i.e., answer choice or numeric condition). Required when the DefaultNextQuestionID for the question is not provided.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PANumericValueType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PANumericValueType">
+    <xsd:sequence>
+      <xsd:element name="LowerBoundComparisonValue" type="datatypes:n1..18">
+        <xsd:annotation>
+          <xsd:documentation>Value for the lower boundary of the comparison.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="LowerBoundComparisonOperator" type="ecl:ComparisonOperatorCodeRestricted">
+        <xsd:annotation>
+          <xsd:documentation>Code that conveys the relationship between the answered value to a question and a defined lower boundary</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="UpperBoundComparisonValue" type="datatypes:n1..18">
+        <xsd:annotation>
+          <xsd:documentation>Value for the upper boundary of the comparison.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="UpperBoundComparisonOperator" type="ecl:ComparisonOperatorCodeRestricted">
+        <xsd:annotation>
+          <xsd:documentation>Code that conveys the relationship between the answered value to a question and a defined upper boundary.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="NextQuestionID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>A QuestionID or value of "END" to identify the next question when it is dependent on the answer to the question (i.e., answer choice or numeric condition). Required when the DefaultNextQuestionID for the question is not provided.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAOpenType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAOpenType">
+    <xsd:sequence>
+      <xsd:element name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DeadlineForReply" type="datatypes:DateType">
+        <xsd:annotation>
+          <xsd:documentation>The timeframe for the provider to provide requested information. This element is related to the case and contains the expiration date that the prescriber is to take the next step. It is not the expiration date of the questions.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="QuestionSet" type="pa-structures:PAQuestionSetGroup"/>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAOpenTypeResponse  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAOpenTypeResponse">
+    <xsd:sequence>
+      <xsd:element name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Reason" type="pa-structures:PAReasonChoice"/>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAOpenTypeResponseForAppeal  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAOpenTypeResponseForAppeal">
+    <xsd:complexContent>
+      <xsd:extension base="pa-structures:PAOpenTypeResponse">
+        <xsd:sequence>
+          <xsd:element name="AppealCaseID" type="datatypes:an1..35">
+            <xsd:annotation>
+              <xsd:documentation>ID assigned by the payer to identify the specific appeal request. If a AppealCaseID is assigned, it is to be exchanged on all subsequent appeal transactions.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAQuestionDetailCommonType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAQuestionDetailCommonType">
+    <xsd:sequence>
+      <xsd:element name="QuestionID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the question within the question set. Must be unique per question in the transaction.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="SequenceNumber" type="datatypes:n1..3">
+        <xsd:annotation>
+          <xsd:documentation>Sequence number assigned by the payer to indicate the order of the question in relation to other questions in the question set. Must be unique per question in the transaction.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="QuestionLevel" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>Question level to indicate grouping of questions.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="QuestionText" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Question text to display to the provider.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="CodedReference" type="pa-structures:PACodedReference"/>
+      <xsd:element minOccurs="0" name="DefaultNextQuestionID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>A QuestionID or value of "END" to identify the next question when it is not dependent on the answer to the question. Required when the QuestionType is date or free text or when the QuestionType is select or numeric and the NextQuestionID for the answer choices or numeric conditions are not provided.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAQuestionDetailForRequestType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAQuestionDetailForRequestType">
+    <xsd:complexContent>
+      <xsd:extension base="pa-structures:PAQuestionDetailCommonType">
+        <xsd:sequence>
+          <xsd:element name="QuestionType" type="pa-structures:PAQuestionTypeForRequest"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAQuestionDetailForResponseType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAQuestionDetailForResponseType">
+    <xsd:complexContent>
+      <xsd:extension base="pa-structures:PAQuestionDetailCommonType">
+        <xsd:sequence>
+          <xsd:element name="QuestionType" type="pa-structures:PAQuestionType"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAQuestionSetGroup  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAQuestionSetGroup">
+    <xsd:sequence>
+      <xsd:element name="Header" type="pa-structures:PAQuestionSetHeader"/>
+      <xsd:element maxOccurs="unbounded" name="Question" type="pa-structures:PAQuestionDetailForResponseType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAQuestionSetGroupForRequest  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAQuestionSetGroupForRequest">
+    <xsd:sequence>
+      <xsd:element name="Header" type="pa-structures:PAQuestionSetHeaderWithComment"/>
+      <xsd:element maxOccurs="unbounded" name="Question" type="pa-structures:PAQuestionDetailForRequestType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAQuestionSetGroupForResponse  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAQuestionSetGroupForResponse">
+    <xsd:sequence>
+      <xsd:element name="Header" type="pa-structures:PAQuestionSetHeader"/>
+      <xsd:element maxOccurs="unbounded" name="Question" type="pa-structures:PAQuestionDetailForResponseType"/>
+      <xsd:element name="DeadlineForReply" type="datatypes:DateType">
+        <xsd:annotation>
+          <xsd:documentation>The timeframe for the provider to provide requested information. This element is related to the case and contains the expiration date that the prescriber is to take the next step. It is not the expiration date of the questions.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAQuestionSetHeader  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAQuestionSetHeader">
+    <xsd:sequence>
+      <xsd:element name="QuestionSetID" type="datatypes:an1..70">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the question set. It should not be assumed this is a unique identifier over time or across payers.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="QuestionSetTitle" type="datatypes:an1..70">
+        <xsd:annotation>
+          <xsd:documentation>Title of the question set.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="QuestionSetDescription" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Descriptive information about the question set.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="QuestionSetContactCommunicationNumber" type="datatypes:CommunicationNumbersTypeRestricted"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAQuestionSetHeaderWithComment  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAQuestionSetHeaderWithComment">
+    <xsd:complexContent>
+      <xsd:extension base="pa-structures:PAQuestionSetHeader">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="QuestionSetComment" type="datatypes:an1..2000">
+            <xsd:annotation>
+              <xsd:documentation>The vendor should always allow the provider to send comments in addition to answering the questions.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAQuestionType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAQuestionType">
+    <xsd:choice>
+      <xsd:element name="Select" type="pa-structures:PASelectType">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the answer to the question is to be selected from a set of choices.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Date" type="datatypes:DateTypeFlag">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the answer to the question is a date.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Numeric" type="pa-structures:PANumericTypeBasic">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the answer to the question is numeric.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="FreeText" type="pa-structures:PAFreeTextTypeBasic">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the answer to the question is FreeText.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAQuestionTypeForRequest  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAQuestionTypeForRequest">
+    <xsd:choice>
+      <xsd:element name="Select" type="pa-structures:PASelectTypeForRequest">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the answer to the question is to be selected from a set of choices.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Date" type="pa-structures:PADateTypeForRequest">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the answer to the question is a date.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Numeric" type="pa-structures:PANumericChoiceForPARequest">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the answer to the question is numeric.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="FreeText" type="pa-structures:PAAnswerForTextType">
+        <xsd:annotation>
+          <xsd:documentation>Indicates the answer to the question is FreeText.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAReasonChoice  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAReasonChoice">
+    <xsd:choice>
+      <xsd:element name="OtherReason" type="ecl:PAOtherReasonCode">
+        <xsd:annotation>
+          <xsd:documentation>Code indicating the reason for prior authorization open.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="MoreInformationRequired" type="pa-structures:PAQuestionSetGroupForResponse"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAReasonClosedCodeType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAReasonClosedCodeType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element maxOccurs="10" name="ClosedReasonCode" type="ecl:PAClosedReasonCode">
+        <xsd:annotation>
+          <xsd:documentation>Code indicating the reason for the prior authorization closure.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="AuthorizationNumber" type="datatypes:an1..140"/>
+      <xsd:element maxOccurs="5" minOccurs="0" name="AuthorizationDetail" type="pa-structures:PAAuthorizationDetails"/>
+      <xsd:element minOccurs="0" name="AuthorizationPeriod" type="structures:DateGroupWithEffectiveExpiredDate"/>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAReasonClosedCodeTypeForAppeal  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAReasonClosedCodeTypeForAppeal">
+    <xsd:sequence>
+      <xsd:element name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element maxOccurs="10" name="ClosedReasonCode" type="ecl:PAClosedReasonCode">
+        <xsd:annotation>
+          <xsd:documentation>Code indicating the reason for the prior authorization closure.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="AuthorizationNumber" type="datatypes:an1..140"/>
+      <xsd:element maxOccurs="5" minOccurs="0" name="AuthorizationDetail" type="pa-structures:PAAuthorizationDetails"/>
+      <xsd:element minOccurs="0" name="AuthorizationPeriod" type="structures:DateGroupWithEffectiveExpiredDate"/>
+      <xsd:element minOccurs="0" name="AppealCaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific appeal request. If a AppealCaseID is assigned, it is to be exchanged on all subsequent appeal transactions.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAReasonCodeType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAReasonCodeType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element maxOccurs="10" name="ReasonCode" type="ecl:PAClosedReasonCodeRestricted"/>
+      <xsd:element minOccurs="0" name="AuthorizationNumber" type="datatypes:an1..140"/>
+      <xsd:element maxOccurs="5" minOccurs="0" name="AuthorizationDetail" type="pa-structures:PAAuthorizationDetails"/>
+      <xsd:element minOccurs="0" name="AuthorizationPeriod" type="structures:DateGroupWithEffectiveExpiredDate"/>
+      <xsd:element minOccurs="0" name="PANote" type="datatypes:an1..2000">
+        <xsd:annotation>
+          <xsd:documentation>Free text note provides additional information regarding the response status.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAResponseChoiceType  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAResponseChoiceType">
+    <xsd:choice>
+      <xsd:element name="Approved" type="pa-structures:PAApprovedDetail">
+        <xsd:annotation>
+          <xsd:documentation>Either AuthorizationDetail or AuthorizationPeriod must be sent.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Denied" type="pa-structures:PADeniedType"/>
+      <xsd:element name="Open" type="pa-structures:PAOpenTypeResponse"/>
+      <xsd:element name="Closed" type="pa-structures:PAReasonClosedCodeType"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAResponseChoiceTypeForAppeal  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAResponseChoiceTypeForAppeal">
+    <xsd:choice>
+      <xsd:element name="Approved" type="pa-structures:PAApprovedDetailForAppeal">
+        <xsd:annotation>
+          <xsd:documentation>Either AuthorizationDetail or AuthorizationPeriod must be sent.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Denied" type="pa-structures:PADeniedTypeForAppeal"/>
+      <xsd:element name="Open" type="pa-structures:PAOpenTypeResponseForAppeal"/>
+      <xsd:element name="Closed" type="pa-structures:PAReasonClosedCodeTypeForAppeal"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAResponseChoiceTypeRestricted  <<choice>>  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAResponseChoiceTypeRestricted">
+    <xsd:choice>
+      <xsd:element name="Open" type="pa-structures:PAOpenType"/>
+      <xsd:element name="Closed" type="pa-structures:PAReasonCodeType"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAResponseStructureCommon  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAResponseStructureCommon">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="ReferenceNumber" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>Transaction Key. Used in conjunction with same field described above in the RequestReferenceNumber. The Mailbox may return the positional key of the specific piece of mail within their files.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ResponseStatus" type="pa-structures:PAResponseChoiceType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAResponseStructureForAppeal  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAResponseStructureForAppeal">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="ReferenceNumber" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>Transaction Key. Used in conjunction with same field described above in the RequestReferenceNumber. The Mailbox may return the positional key of the specific piece of mail within their files.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ResponseStatus" type="pa-structures:PAResponseChoiceTypeForAppeal"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAResponseStructureRestricted  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAResponseStructureRestricted">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="ReferenceNumber" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>Transaction Key. Used in conjunction with same field described above in the RequestReferenceNumber. The Mailbox may return the positional key of the specific piece of mail within their files.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ResponseStatus" type="pa-structures:PAResponseChoiceTypeRestricted"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PASelectType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PASelectType">
+    <xsd:sequence>
+      <xsd:element name="SelectMultiple" type="ecl:BooleanCode">
+        <xsd:annotation>
+          <xsd:documentation>Indicates if multiple choices can be selected to answer the question.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element maxOccurs="unbounded" minOccurs="2" name="Choice" type="pa-structures:PAAnswerChoiceCommonType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PASelectTypeForRequest  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PASelectTypeForRequest">
+    <xsd:complexContent>
+      <xsd:extension base="pa-structures:PASelectType">
+        <xsd:sequence>
+          <xsd:element maxOccurs="unbounded" minOccurs="0" name="Answer" type="pa-structures:PACompletedAnswerChoiceForSelectType"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PASolicitedType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PASolicitedType">
+    <xsd:sequence>
+      <xsd:element name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DeadlineForReply" type="datatypes:DateType">
+        <xsd:annotation>
+          <xsd:documentation>The timeframe for the provider to provide requested information. This element is related to the case and contains the expiration date that the prescriber is to take the next step. It is not the expiration date of the questions.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="QuestionSet" type="pa-structures:PAQuestionSetGroupForRequest"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <!--  PAUnsolicitedType  -->
+  <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <xsd:complexType name="PAUnsolicitedType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="0" minOccurs="0" name="PACaseID" type="datatypes:an1..35">
+        <xsd:annotation>
+          <xsd:documentation>ID assigned by the payer to identify the specific case. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element maxOccurs="0" minOccurs="0" name="DeadlineForReply" type="datatypes:DateType">
+        <xsd:annotation>
+          <xsd:documentation>The timeframe for the provider to provide requested information. This element is related to the case and contains the expiration date that the prescriber is to take the next step. It is not the expiration date of the questions.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element minOccurs="0" name="QuestionSet" type="pa-structures:PAQuestionSetGroupForRequest"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>The NCPDP transport.xsd defines the envelope structures for the transactions and highest level 
+elements for each transaction.</xsd:documentation>
+  </xsd:annotation>
+</xsd:schema>
