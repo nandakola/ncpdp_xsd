@@ -12,7 +12,7 @@ NOTICE: In addition, this NCPDP Standard contains certain data fields and elemen
 
 The purpose of ecl.xsd is to validate the SCRIPT/Specialized/XML schema.  This xsd is not a ballot item.
 -->
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2019011">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2019011" targetNamespace="http://www.ncpdp.org/schema/ecl">
 	<!-- ================================================== -->
 	<!-- =====  Simple Type Definitions  -->
 	<!-- ================================================== -->
