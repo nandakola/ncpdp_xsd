@@ -14,12 +14,12 @@
  elementFormDefault="qualified" 
  attributeFormDefault="unqualified"
   version="pmbc-0.1.0">
-	<xsd:import namespace="http://www.ncpdp.org/schema/datatypes" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2013101_xsd/datatypes.xsd"/>
-	<xsd:import namespace="http://www.ncpdp.org/schema/ecl" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2013101_xsd/ecl.xsd"/>
-	<xsd:import namespace="http://www.ncpdp.org/schema/structures" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2013101_xsd/structures.xsd"/>
-	<xsd:import namespace="http://www.ncpdp.org/schema/script" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2013101_xsd/script.xsd"/>
-	<xsd:import namespace="http://www.ncpdp.org/schema/specialized" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2013101_xsd/specialized.xsd"/>
-	<xsd:import namespace="http://www.ncpdp.org/schema/transport" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2013101_xsd/transport.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/datatypes" schemaLocation="https://raw.githubusercontent.com/GeminiHealthLLC/ncpdp_xsd/master/v2013101_xsd/datatypes.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/ecl" schemaLocation="https://raw.githubusercontent.com/GeminiHealthLLC/ncpdp_xsd/master/v2013101_xsd/ecl.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/structures" schemaLocation="https://raw.githubusercontent.com/GeminiHealthLLC/ncpdp_xsd/master/v2013101_xsd/structures.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/script" schemaLocation="https://raw.githubusercontent.com/GeminiHealthLLC/ncpdp_xsd/master/v2013101_xsd/script.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/specialized" schemaLocation="https://raw.githubusercontent.com/GeminiHealthLLC/ncpdp_xsd/master/v2013101_xsd/specialized.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/transport" schemaLocation="https://raw.githubusercontent.com/GeminiHealthLLC/ncpdp_xsd/master/v2013101_xsd/transport.xsd"/>
 	<!-- ================================================== -->
 	<!-- =====  Element Declarations  -->
 	<!-- ================================================== -->

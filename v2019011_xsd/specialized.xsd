@@ -11,9 +11,9 @@ NCPDP recognizes the confidentiality of certain information exchanged electronic
 NOTICE: In addition, this NCPDP Standard contains certain data fields and elements that may be completed by users with the proprietary information of third parties. The use and distribution of third parties' proprietary information without such third parties' consent, or the execution of a license or other agreement with such third party, could subject the user to numerous legal claims. All users are encouraged to contact such third parties to determine whether such information is proprietary and if necessary, to consult with legal counsel to make arrangements for the use and distribution of such proprietary information.
 -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2019011" targetNamespace="http://www.ncpdp.org/schema/specialized">
-	<xsd:import namespace="http://www.ncpdp.org/schema/datatypes" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2019011_xsd/datatypes.xsd"/>
-	<xsd:import namespace="http://www.ncpdp.org/schema/ecl" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2019011_xsd/ecl.xsd"/>
-	<xsd:import namespace="http://www.ncpdp.org/schema/structures" schemaLocation="https://raw.githubusercontent.com/agacode/ncpdp_xsd/master/v2019011_xsd/structures.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/datatypes" schemaLocation="https://raw.githubusercontent.com/GeminiHealthLLC/ncpdp_xsd/master/v2019011_xsd/datatypes.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/ecl" schemaLocation="https://raw.githubusercontent.com/GeminiHealthLLC/ncpdp_xsd/master/v2019011_xsd/ecl.xsd"/>
+	<xsd:import namespace="http://www.ncpdp.org/schema/structures" schemaLocation="https://raw.githubusercontent.com/GeminiHealthLLC/ncpdp_xsd/master/v2019011_xsd/structures.xsd"/>
 	<!-- ================================================== -->
 	<!-- =====  Complex Type Definitions  -->
 	<!-- ================================================== -->
